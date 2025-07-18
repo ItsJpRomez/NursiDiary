@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Encyclopedia</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        display: flex;
+        background-color: #ffffff;
+        color: #000000;
+      }
+      /* Dark Mode */
+      body.dark-mode {
+        background-color: #121212;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode h1,
+      body.dark-mode h2,
+      body.dark-mode h3,
+      body.dark-mode p,
+      body.dark-mode a {
+        color: #f0f0f0;
+      }
+
+      /* Sidebar */
+      body.dark-mode .sidebar {
+        background-color: #1f1f1f;
+      }
+
+      body.dark-mode .sidebar nav a {
+        color: #ccc;
+      }
+
+      body.dark-mode .sidebar nav a.active,
+      body.dark-mode .sidebar nav a:hover {
+        color: #00bcd4;
+      }
+
+      /* Card Styling */
+      body.dark-mode .accordion-card {
+        background-color: #1e1e1e;
+        color: #f0f0f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      }
+
+      body.dark-mode .accordion-card:hover {
+        background-color: #2a2a2a;
+      }
+
+      /* Input Fields */
+      body.dark-mode input[type="text"] {
+        background-color: #2c2c2c;
+        color: #f0f0f0;
+        border: 1px solid #444;
+      }
+
+      body.dark-mode input[type="text"]::placeholder {
+        color: #aaa;
+      }
+
+      /* Alphabet links */
+      body.dark-mode .alphabet-nav a {
+        color: #00bcd4;
+      }
+      .sidebar {
+        width: 240px;
+        background-color: #ffffff;
+        padding: 20px;
+        height: 100vh;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+      }
+      .sidebar h2 {
+        color: #00bcd4;
+         margin-bottom: 30px;
+      }
+      .sidebar nav a {
+         display: flex;
+  align-items: center;
+  padding: 0.7rem 0.5rem;
+  color: #555;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+      }
+      
+      .sidebar nav a:hover {
+        background: teal;
+        color: #ffffff;
+      }
+      .main {
+        margin-left: 220px;
+        padding: 1rem 2rem;
+        width: 100%;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .search input {
+        padding: 10px;
+        width: 300px;
+        height: 5px;
+        border-radius: 5px;
+        border: none;
+      }
+
+      #noResultsMessage {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+      .accordion-card {
+        background-color: #f0f0f0;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s;
+      }
+      .accordion-card:hover {
+        background-color: #20cfcf;
+      }
+      .alphabet-nav {
+        margin: 20px 0;
+      }
+      .alphabet-nav a {
+        margin: 0 5px;
+        color: #00bcd4;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .alphabet-nav a:hover {
+        text-decoration: underline;
+      }
+      body.dark-mode .term-card {
+        background-color: #1e1e1e;
+        color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      body.dark-mode .term-card:hover {
+        background-color: #2a2a2a;
+      }
+      .encyclopedia {
+        margin-top: 20px;
+      }
+
+      .mb-20 {
+  margin-bottom: 1.5rem;
+}
+
+
+      .letter-heading {
+        font-size: 1.5rem;
+        color: #00bcd4;
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 2px solid #00bcd4;
+        padding-bottom: 5px;
+      }
+
+      .accordion-card {
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        margin-bottom: 10px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .accordion-toggle {
+        width: 100%;
+        background-color: #ffffff;
+        border: none;
+        padding: 1.2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        color: #333;
+        transition: background-color 0.3s ease;
+      }
+
+      .accordion-toggle:hover {
+        background-color: #e0f7fa;
+      }
+
+      .accordion-toggle i {
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-toggle.active i {
+        transform: rotate(180deg);
+      }
+      .accordion-header {
+        cursor: pointer;
+        font-weight: bold;
+        background-color: #f9f9f9;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        transition: background-color 0.3s;
+      }
+      .accordion-header.active {
+        background-color: #e0f7fa;
+      }
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        padding: 0 15px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-top: none;
+      }
+
+      .accordion-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.accordion-content strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #00838f;
+  text-transform: uppercase;
+}
+.accordion-content ul {
+  padding-left: 1.5rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.accordion-content ul li {
+  margin-bottom: 0.3rem;
+  font-size: 1.05rem;
+}
+
+      .accordion-content.open {
+        max-height: 2000px; /* large enough to fit your content */
+        padding: 1rem 15px;
+      }
+
+      body.dark-mode .accordion-card {
+        background-color: #1e1e1e;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode .accordion-toggle {
+        background-color: #2a2a2a;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode .accordion-content {
+        background-color: #121212;
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("input", function () {
+      const query = this.value.toLowerCase().trim();
+      const cards = document.querySelectorAll(".accordion-card");
+
+      cards.forEach((card) => {
+        const toggle = card.querySelector(".accordion-toggle");
+        const content = card.querySelector(".accordion-content");
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(query)) {
+          card.style.display = "block";
+          toggle.classList.add("active");
+          content.classList.add("open");
+          toggle.querySelector("i").style.transform = "rotate(180deg)";
+        } else {
+          card.style.display = "none";
+          toggle.classList.remove("active");
+          content.classList.remove("open");
+          toggle.querySelector("i").style.transform = "rotate(0deg)";
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll(".accordion-toggle").forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const content = toggle.nextElementSibling;
+      const isOpen = content.classList.contains("open");
+
+      document.querySelectorAll(".accordion-toggle").forEach((btn) => {
+        btn.classList.remove("active");
+        btn.querySelector("i").style.transform = "rotate(0deg)";
+      });
+
+      document.querySelectorAll(".accordion-content").forEach((panel) => {
+        panel.classList.remove("open");
+      });
+
+      if (!isOpen) {
+        toggle.classList.add("active");
+        content.classList.add("open");
+        toggle.querySelector("i").style.transform = "rotate(180deg)";
+      }
+    });
+  });
+</script>
+
+  
+  <body>
+    <div class="sidebar">
+      <h2 class="logo"><i class="fas fa-heartbeat"></i> NURSIDIARY</h2>
+      <nav>
+        <a href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="medical.html" class="active"
+          ><i class="fas fa-book-medical"></i> Medical Encyclopedia</a
+        >
+        <a href="calculator.html"
+          ><i class="fas fa-calculator"></i> Drug Calculation</a
+        >
+        <a href="medicines.html"><i class="fas fa-pills"></i> Medicines</a>
+        <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+        <a href="#" onclick="toggleDarkMode()"
+          ><i class="fas fa-moon"></i> Dark Mode</a
+        >
+      </nav>
+    </div>
+
+    <div class="main fade">
+      <header>
+        <div class="search mb-20">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search medical terms..."
+    oninput="searchAccordionTerms()"
+  />
+  <i class="fas fa-search"></i>
+</div>
+<p id="noResultsMessage" style="display:none; color: red; margin-top: 10px;">No results found.</p>
+
+      </header>
+
+       <section class="medicines">
+        <p><h2>Medicines</h2></p>
+        <div class="alphabet-nav">
+          <a href="#A">A</a>
+          <a href="#B">B</a>
+          <a href="#C">C</a>
+          <a href="#D">D</a>
+          <a href="#E">E</a>
+          <a href="#F">F</a>
+          <a href="#G">G</a>
+          <a href="#H">H</a>
+          <a href="#I">I</a>
+          <a href="#J">J</a>
+          <a href="#K">K</a>
+          <a href="#L">L</a>
+          <a href="#M">M</a>
+          <a href="#N">N</a>
+          <a href="#O">O</a>
+          <a href="#P">P</a>
+          <a href="#Q">Q</a>
+          <a href="#R">R</a>
+          <a href="#S">S</a>
+          <a href="#T">T</a>
+          <a href="#U">U</a>
+          <a href="#V">V</a>
+          <a href="#W">W</a>
+          <a href="#X">X</a>
+          <a href="#Y">Y</a>
+          <a href="#Z">Z</a>
+        </div>
+
+        <div id="A">
+          <div class="letter-section">
+            <h3 class="letter-heading">A</h3>
+            <div class="accordion-card">
+              <button class="accordion-toggle">
+                <span>Abacavir</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="accordion-content">
+                <p>pronounced as (a ba ka' vir)
+                </p>
+
+                <p><strong>Why is this medication prescribed?</strong></p>
+                Abacavir is used along with other medications to treat human immunodeficiency virus (HIV) infection.
+                Abacavir is in a class of medications called nucleoside reverse transcriptase inhibitors (NRTIs). 
+                It works by decreasing the amount of HIV in the blood. 
+                Although abacavir does not cure HIV, it may decrease your chance of developing acquired immunodeficiency syndrome (AIDS) and HIV-related illnesses such as serious infections or cancer.
+                Taking these medications along with practicing safer sex and making other lifestyle changes may decrease the risk of transmitting (spreading) the HIV virus to other people.
+              </p>
+
+                <p><strong>How should this medicine be used?</strong></p>
+                Abacavir comes as a tablet and a solution (liquid) to take by mouth. It is usually taken once or twice daily with or without food.
+                Take abacavir at around the same time(s) every day. 
+                Follow the directions on your prescription label carefully, and ask your doctor or pharmacist to explain any part you do not understand.
+                Take abacavir exactly as directed. Do not take more or less of it or take it more often than prescribed by your doctor.
+              </p>
+              Abacavir helps to control HIV infection but does not cure it. Continue to take abacavir even if you feel well.
+              Do not stop taking abacavir without talking to your doctor.
+               If you stop taking abacavir or skip doses, your condition may become more difficult to treat, or you could have an allergic reaction when restarting the medication.
+               Do not run out of medication. When your supply of abacavir starts to run low, get more from your doctor or pharmacist.
+            </p>
+                <p><strong>Other uses for this medicine</strong><p></p> 
+              </ul>
+                Abacavir is also used in combination with other antiviral medications to prevent HIV infection in people who have been exposed to it.
+                Talk to your doctor about the possible risks of using this medication for your condition.</p>
+                This medication may be prescribed for other uses; ask your doctor or pharmacist for more information.</p>
+            </ul>
+            <p><strong>Brand Names</strong></p>
+            <ul>
+                <li>Ziagen®</li>
+                </p>
+              </div>
+            </div>
+          </div>
+
+            <div class="accordion-card">
+              <button class="accordion-toggle">
+                <span>Abaloparatide Injection</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="accordion-content">
+                <p>pronounced as (a bal" oh par' a tide)</p>
+                <p><strong>Why is this medication prescribed?</strong></p>
+                Abaloparatide injection is used to treat osteoporosis (condition in which the bones become thin and weak and break easily)
+                in women who have undergone menopause ('change in life,' end of menstrual periods),
+                who are at high risk of fractures (broken bones) (history of fracture from osteoporosis or multiple risk factors for fracture)
+                or who have failed or not tolerated other medications. Abaloparatide injection is also used to treat osteoporosis in men
+                who are at high risk of fracture or who have failed or not tolerated other medications.
+                Abaloparatide injection contains a synthetic form of a natural human hormone called parathyroid hormone (PTH).
+                It works by causing the body to build new bone and by increasing bone strength and density (thickness).</p>
+                
+                <p><strong>How should this medicine be used?</strong></p>
+                Abaloparatide injection comes as a solution (liquid) to inject subcutaneously (under the skin).
+                It is usually given once a day. Use abaloparatide injection at around the same time every day. Follow the directions on your prescription label carefully,
+                and ask your doctor or pharmacist to explain any part you do not understand. Use abaloparatide injection exactly as directed.
+                Do not use more or less of it or use it more often than prescribed by your doctor.</p>
+                <p>Abaloparatide injection comes in a pen that contains enough medication for 30 doses. Do not transfer the medication to another syringe.
+                  Dispose of your pen 30 days after first opening even if it still contains unused medication.
+                </p>
+                <p>You should inject abaloparatide injection into the lower stomach area. Avoid giving your injection within the 2-inch area around your belly button. Talk to your doctor about how to change your injection site for each injection. Do not give abaloparatide injection into your veins or muscles. Do not inject into areas where the skin is tender, bruised, red, scaly, hard, or where you have scars or stretch marks.</p>
+                <p>You should know that abaloparatide injection may cause dizziness, lightheadedness, and fainting when you get up too quickly from a lying position as well as a fast or pounding heartbeat and nausea. This usually occurs within 4 hours after receiving your dose and generally goes away within a few hours. You should receive your first several doses of abaloparatide injection where you can sit or lie down right away if necessary.</p>
+                <p>Your doctor may recommend calcium and vitamin D supplements to take during your treatment.</p>
+                <p>Abaloparatide injection controls osteoporosis but does not cure it. Continue to use abaloparatide injection even if you feel well. Do not stop using abaloparatide injection without talking to your doctor.</p>
+                 <p><strong>Other uses for this medicine</strong><p></p> 
+              </ul>
+                This medication may be prescribed for other uses; ask your doctor or pharmacist for more information.</p>
+            </ul>
+            <p><strong>What side effects can this medication cause?</strong></p>>
+              Abaloparatide injection may cause side effects. Tell your doctor if any of these symptoms are severe or do not go away:</p>
+              <ul>
+                <li>dizziness</li>
+                <li>sense of spinning</li>
+                <li>headache</li>
+                <li>tiredness</li>
+                <li>upper stomach pain or bloating</li>
+                <li>nausea</li>
+                <li>diarrhea</li>
+                <li>pain in joints</li>
+                <li>redness, pain, or swelling in the area where the medication was injected</li>
+              </ul>
+              <p>Some side effects can be serious. If you experience any of these symptoms or those listed in the IMPORTANT WARNING section, call your doctor immediately:</p>
+              <ul>
+                <li>signs of high blood calcium: nausea, vomiting, constipation, lack of energy, and muscle weakness</li>
+                <li>pain in the lower back or lower stomach</li>
+                <li>painful urination</li>
+                <li>blood in the urine</li>
+                </ul>
+                <p>Abaloparatide injection may cause other side effects. Call your doctor if you have any unusual problems while taking this medication.</p>
+              <p>If you experience a serious side effect, you or your doctor may send a report to the Food and Drug Administration's (FDA)</p>
+              <p><strong>Brand Names</strong></p>
+            <ul>
+                <li>Tymlos®</li>
+                </p>
+              </div>
+            </div>
+          </div>
+
+<div id="B">
+  <div class="letter-section">
+    <h3 class="letter-heading">B</h3>
+
+    <!-- Baclofen -->
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Baclofen</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p>pronounced as (bak' loe fen)</p>
+        <p><strong>Why is this medication prescribed?</strong>
+        Baclofen is used to treat muscle symptoms caused by multiple sclerosis, including spasm, pain, and stiffness. It may also be used for spinal cord injuries or other conditions that affect the spinal cord.</p>
+        
+        <strong>How should this medicine be used?</strong>
+        <p>Baclofen is usually taken by mouth with or without food 3 times a day. It may also be administered through a spinal pump in severe cases.</p>
+
+        <p><strong>What side effects can this medication cause?</strong></p>
+        <ul>
+          <li>Drowsiness</li>
+          <li>Dizziness</li>
+          <li>Weakness</li>
+          <li>Nausea</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Brand Names</strong></p>
+        <ul>
+          <li>Lioresal®</li>
+          <li>Gablofen®</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Budesonide -->
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Budesonide</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p>pronounced as (bue des' oh nide)</p>
+        <p><strong>Why is this medication prescribed?</strong></p>
+        Budesonide (Entocort EC) is used to treat Crohn's disease (a condition in which the body attacks the lining of the digestive tract, causing pain, diarrhea, weight loss, and fever) in adults and children 8 years of age and older. Budesonide (Tarpeyo) is used to decrease protein in the urine in patients with primary immunoglobulin A nephropathy (kidney disease that occurs in some people when too much immunoglobin A builds up in the kidney, causing inflammation). Budesonide (Uceris) is used to treat ulcerative colitis (a condition which causes swelling and sores in the lining of the colon [large intestine] and rectum). Budesonide is in a class of medications called corticosteroids. It works by decreasing inflammation (swelling) in the digestive tract of people who have Crohn's disease or ulcerative colitis. or in the kidney of people with nephropathy.
+      </p>
+        <p><strong>How should this medicine be used?</strong></p>
+        Budesonide comes as a capsule (Enterocort EC, Tarpeyo) and tablet (Uceris)to take by mouth. Budesonide capsules (Enterocort EC, Tarpeyo) are usually taken once a day in the morning. Budesonide (Tarpeyo) should be taken at least one hour before a meal. B Budesonide tablet (Uceris) is taken once daily in the morning with or without food. Your doctor will tell you how long to take budesonide.Follow the directions on your prescription label carefully, and ask your doctor or pharmacist to explain any part you do not understand. Take budesonide exactly as directed. Do not take more or less of it or take it more often than prescribed by your doctor.
+    </p>Budesonide may help control your symptoms, but it will not cure your condition. Your doctor will watch you carefully to see how well budesonide works for you. If your symptoms are controlled, your doctor may decrease your dose of budesonide capsules. It is important to tell your doctor how you are feeling during your treatment.
+    </p>
+        <p><strong>What side effects can this medication cause?</strong></p>
+        <ul>
+          <li>Abdominal pain</li>
+          <li>Dry, itchy skin</li>
+          <li>Headache</li>
+          <li>Difficulty sleeping</li>
+          <li>Nausea</li>
+        </ul>
+
+        <p><strong>Brand Names</strong></p>
+        <ul>
+          <li>Entocort EC®</li>
+          <li>Tarpeyo®</li>
+          <li>Uceris®</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div id="C">
+  <div class="letter-section">
+    <h3 class="letter-heading">C</h3>
+
+    <!-- Cetirizine -->
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Cetirizine</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p>pronounced as (se ti' ra zeen)</p>
+        <p><strong>Why is this medication prescribed?</strong></p>
+        Cetirizine is used to temporarily relieve the symptoms of allergies (sneezing; runny nose; itchy, red, watery eyes; and itchy nose or throat) due to hay fever (allergy to pollen, dust, or other substances in the air) or allergy to other substances (such as dust mites, animal dander, cockroaches, and molds). Cetirizine is also used to treat itching and redness caused by hives. However, cetirizine does not prevent hives or other allergic skin reactions. Cetirizine is in a class of medications called antihistamines. It works by blocking the action of histamine, a substance in the body that causes allergic symptoms.
+      </p>
+        <p><strong>How should this medicine be used?</strong></p>
+        Cetirizine comes as a tablet, a chewable tablet, an extended release tablet, and a syrup (liquid) to take by mouth. Take once a day with or without food. Take cetirizine at around the same time every day.
+    </p>
+    Take cetirizine exactly as directed. Do not take more or less of it or take it more often than prescribed by your doctor.
+  </p>
+  Do not use cetirizine to treat hives that are bruised or blistered, that are an unusual color, or that do not itch. Call your doctor if you have these types of hives.
+</p>
+        <p><strong>What side effects can this medication cause?</strong></p>
+        Cetirizine may cause side effects. Tell your doctor if any of these symptoms are severe or do not go away:
+        </p>
+        <ul>
+          <li>Drowsiness</li>
+          <li>Excessive tiredness</li>
+          <li>Dry mouth</li>
+          <li>Stomach pain</li>
+          <li>Diarrhea</li>
+          <li>Vomiting</li>
+        </ul>
+
+        <p><strong>Brand Names</strong></p>
+        <ul>
+          <li>Zyrtec®</li>
+          <li>Aller-Tec</li>
+          <li>Alleroff</li>
+        </ul>
+        <p><strong>Brand names of combination products</strong></p>
+        <ul>
+          <li>Aller-Tec-D (containing Cetirizine, Pseudoephedrine)</li>
+          <li>Citiri-D (containing Cetirizine, Pseudoephedrine)</li>
+          <li>Wal Zyr D (containing Cetirizine, Pseudoephedrine)</li>
+          <li>Zyrtec-D® (containing Cetirizine, Pseudoephedrine)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Clopidogrel -->
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Clopidogrel</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Why is this medication prescribed?</strong></p>
+        Clopidogrel helps prevent strokes and heart attacks in people with heart disease by keeping blood clots from forming.
+
+        <p><strong>How should this medicine be used?</strong></p>
+        Clopidogrel is taken by mouth, usually once daily with or without food. Take at the same time each day.
+
+        <p><strong>What side effects can this medication cause?</strong></p>
+        <ul>
+          <li>Bleeding</li>
+          <li>Bruising</li>
+          <li>Stomach pain</li>
+          <li>Headache</li>
+        </ul>
+
+        <p><strong>Brand Names</strong></p>
+        <ul>
+          <li>Plavix®</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="D">
+  <div class="letter-section">
+    <h3 class="letter-heading">D</h3>
+    <!-- Dexamethasone -->
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Dexamethasone</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Why is this medication prescribed?</strong></p>
+        Dexamethasone is a corticosteroid used to relieve inflammation in various conditions like arthritis, skin diseases, and severe allergies.
+
+        <p><strong>How should this medicine be used?</strong></p>
+        Available in tablet, injection, or eye drop form. Dosage depends on your condition and response to treatment.
+
+        <p><strong>What side effects can this medication cause?</strong></p>
+        <ul>
+          <li>Upset stomach</li>
+          <li>Increased appetite</li>
+          <li>Weight gain</li>
+          <li>Difficulty sleeping</li>
+        </ul>
+
+        <p><strong>Brand Names</strong></p>
+        <ul>
+          <li>Decadron®</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Diphenhydramine -->
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Diphenhydramine</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Why is this medication prescribed?</strong></p>
+        Diphenhydramine is used to relieve symptoms of allergy, hay fever, and the common cold. It is also used to prevent and treat nausea, vomiting, and dizziness caused by motion sickness.
+
+        <p><strong>How should this medicine be used?</strong></p>
+        It comes in tablets, capsules, and liquid form. Usually taken every 4–6 hours as needed.
+
+        <p><strong>What side effects can this medication cause?</strong></p>
+        <ul>
+          <li>Drowsiness</li>
+          <li>Dry mouth</li>
+          <li>Dizziness</li>
+          <li>Constipation</li>
+        </ul>
+
+        <p><strong>Brand Names</strong></p>
+        <ul>
+          <li>Benadryl®</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <div id="E">
+  <div class="letter-section">
+    <h3 class="letter-heading">E</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Enalapril</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (e nal' a pril)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Enalapril is used to treat high blood pressure and heart failure. It is also used to help prevent strokes, heart attacks, and kidney problems. Enalapril is in a class of medications called angiotensin-converting enzyme (ACE) inhibitors. It works by relaxing blood vessels so that blood can flow more easily.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    Enalapril comes as a tablet and a liquid to take by mouth. It is usually taken once or twice a day with or without food. Take enalapril at the same time(s) each day.
+
+    Take enalapril exactly as directed. Do not take more or less of it or take it more often than prescribed by your doctor.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    Enalapril may cause side effects. Tell your doctor if any of these symptoms are severe or do not go away:
+    </p>
+    <ul>
+      <li>Dizziness</li>
+      <li>Fatigue</li>
+      <li>Headache</li>
+      <li>Dry cough</li>
+      <li>Nausea</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Vasotec®</li>
+      <li>Epaned®</li>
+    </ul>
+  </div>
+</div>
+
+ <div id="F">
+  <div class="letter-section">
+    <h3 class="letter-heading">F</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Furosemide</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (fyoor' oh se mide)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Furosemide is used to reduce extra fluid in the body (edema) caused by conditions such as heart failure, liver disease, and kidney disease. It is also used to treat high blood pressure. It helps your body get rid of excess salt and water by increasing the amount of urine you make.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    Furosemide comes as a tablet and a solution to take by mouth. It is usually taken once or twice a day. It may also be given by injection in hospital settings. Follow your doctor's instructions closely.
+
+    <p>Take furosemide exactly as prescribed. Do not take more or less of it or take it more often than your doctor prescribes.</p>
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    Furosemide may cause side effects. Tell your doctor if any of these symptoms are severe or do not go away:
+    </p>
+    <ul>
+      <li>Frequent urination</li>
+      <li>Dizziness</li>
+      <li>Dehydration</li>
+      <li>Muscle cramps</li>
+      <li>Blurred vision</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Lasix®</li>
+    </ul>
+  </div>
+</div>
+
+ <div id="G">
+  <div class="letter-section">
+    <h3 class="letter-heading">G</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Gabapentin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (gab a pen' tin)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Gabapentin is used to help control certain types of seizures in people who have epilepsy. It is also used to relieve the pain of postherpetic neuralgia (PHN), the burning or stabbing pain that may last for months or years after a shingles infection. Gabapentin works by affecting chemicals and nerves in the body that are involved in the cause of seizures and pain.
+  </p>
+    <p><strong>How should this medicine be used?</strong></p>
+    Gabapentin comes as a capsule, tablet, and oral solution to take by mouth. It is usually taken with or without food three times a day. Take gabapentin at evenly spaced times throughout the day and night.
+
+    Take gabapentin exactly as directed. Do not take more or less of it or take it more often than prescribed by your doctor.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    Gabapentin may cause side effects. Tell your doctor if any of these symptoms are severe or do not go away:
+    </p>
+    <ul>
+      <li>Dizziness</li>
+      <li>Fatigue</li>
+      <li>Swelling of hands or feet</li>
+      <li>Unsteadiness</li>
+      <li>Tremor</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Neurontin®</li>
+      <li>Gralise®</li>
+    </ul>
+  </div>
+</div>
+
+ <div id="H">
+  <div class="letter-section">
+    <h3 class="letter-heading">H</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Hydralazine</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (hye dral' a zeen)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Hydralazine is used to treat high blood pressure. Lowering high blood pressure helps prevent strokes, heart attacks, and kidney problems. It works by relaxing blood vessels so blood can flow more easily.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    Hydralazine comes as a tablet to take by mouth. It is usually taken two to four times a day. Take hydralazine at the same time(s) each day and exactly as directed.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Dizziness</li>
+      <li>Nausea</li>
+      <li>Loss of appetite</li>
+      <li>Diarrhea</li>
+      <li>Fast heartbeat</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Apresoline®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Hydrochlorothiazide</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (hye droe klor oh thye' a zide)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Hydrochlorothiazide is used to treat high blood pressure and fluid retention (edema). It is in a class of medications called diuretics or "water pills." It causes the kidneys to get rid of unneeded water and salt from the body into the urine.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    It comes as a tablet or capsule taken once or twice a day with or without food. Take it at the same time each day.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Increased urination</li>
+      <li>Dizziness</li>
+      <li>Muscle cramps</li>
+      <li>Upset stomach</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Microzide®</li>
+      <li>HydroDIURIL®</li>
+    </ul>
+  </div>
+</div>
+
+     <div id="I">
+  <div class="letter-section">
+    <h3 class="letter-heading">I</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ibuprofen</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (eye bue' proe fen)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ibuprofen is used to relieve pain, tenderness, swelling, and stiffness caused by osteoarthritis and rheumatoid arthritis. It is also used to relieve mild to moderate pain and reduce fever.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    Ibuprofen comes as a tablet, chewable tablet, capsule, and liquid to take by mouth. It is usually taken every 4 to 6 hours as needed.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Upset stomach</li>
+      <li>Dizziness</li>
+      <li>Ringing in the ears</li>
+      <li>Constipation</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Advil®</li>
+      <li>Motrin®</li>
+      <li>Midol®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ipratropium</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (i pra troe' pee um)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ipratropium is used to control and prevent symptoms (wheezing and shortness of breath) caused by ongoing lung disease (COPD, including bronchitis and emphysema). It works by relaxing the muscles around the airways so that they open up and you can breathe more easily.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    It is inhaled using a nebulizer or inhaler, usually 3–4 times a day.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Dry mouth</li>
+      <li>Cough</li>
+      <li>Dizziness</li>
+      <li>Headache</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Atrovent®</li>
+    </ul>
+  </div>
+</div>
+
+     <div id="J">
+  <div class="letter-section">
+    <h3 class="letter-heading">J</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Jantoven</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (jant' oh ven)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Jantoven (warfarin) is used to prevent blood clots in veins and arteries, which can reduce the risk of stroke, heart attack, or other serious conditions. It works by decreasing the formation of blood clots.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    Jantoven is taken by mouth once daily with or without food. The dose is adjusted based on blood test results (INR).
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Bleeding</li>
+      <li>Headache</li>
+      <li>Dizziness</li>
+      <li>Weakness</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Jantoven®</li>
+      <li>Coumadin®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Janumet</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (JAN-ue-met)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Janumet contains a combination of sitagliptin and metformin and is used to control high blood sugar in people with type 2 diabetes. It helps prevent kidney damage, blindness, nerve problems, loss of limbs, and sexual function problems.
+</p>
+    <p><strong>How should this medicine be used?</strong></p>
+    It is usually taken twice a day with meals. Follow the prescription label and dosage exactly.
+</p>
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Diarrhea</li>
+      <li>Headache</li>
+      <li>Stomach pain</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Janumet®</li>
+    </ul>
+  </div>
+</div>
+
+<div id="K">
+  <div class="letter-section">
+    <h3 class="letter-heading">K</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ketorolac</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (kee toe role' ak)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ketorolac is used for the short-term treatment of moderate to severe pain. It is often used after surgery. It works by blocking substances in the body that cause inflammation and pain.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Ketorolac is usually taken by mouth, injection, or as an eye drop. It is usually taken every 4 to 6 hours and not used for more than 5 days in total.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Stomach pain</li>
+      <li>Drowsiness</li>
+      <li>Nausea</li>
+      <li>Dizziness</li>
+      <li>Headache</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Toradol®</li>
+      <li>Acular® (eye drops)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ketoconazole</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (kee toe kon' a zole)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ketoconazole is used to treat fungal infections of the skin, mouth, and throat. It may also be used in shampoo form for dandruff or seborrheic dermatitis.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    It is taken as a tablet or used topically on the skin or scalp, depending on the condition. Follow dosage instructions carefully.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Itching</li>
+      <li>Stomach pain</li>
+      <li>Dizziness</li>
+      <li>Hair loss (shampoo)</li>
+      <li>Skin irritation (topical)</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Nizoral®</li>
+    </ul>
+  </div>
+</div>
+
+    <div id="L">
+  <div class="letter-section">
+    <h3 class="letter-heading">L</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Loratadine</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (lor at' a deen)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Loratadine is used to temporarily relieve the symptoms of hay fever and other allergies. It can help with sneezing, runny nose, and itchy or watery eyes.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Loratadine is taken by mouth, once daily. It comes in tablets, chewables, and liquid form.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Fatigue</li>
+      <li>Dry mouth</li>
+      <li>Nervousness (in children)</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Claritin®</li>
+      <li>Alavert®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Lisinopril</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (lye sin' oh pril)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Lisinopril is used to treat high blood pressure and heart failure. It may also be used after a heart attack. It is an ACE inhibitor that relaxes blood vessels.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Lisinopril is taken once daily by mouth with or without food. Take it at the same time every day.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Dizziness</li>
+      <li>Cough</li>
+      <li>Headache</li>
+      <li>Fatigue</li>
+      <li>Low blood pressure</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Prinivil®</li>
+      <li>Zestril®</li>
+    </ul>
+  </div>
+</div>
+
+    <div id="M">
+  <div class="letter-section">
+    <h3 class="letter-heading">M</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Metformin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (met for' min)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Metformin is used with diet and exercise to control blood sugar in people with type 2 diabetes. It helps restore your body's proper response to the insulin you naturally produce.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    It is usually taken once or twice daily with meals. Follow your doctor’s directions exactly.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Diarrhea</li>
+      <li>Gas</li>
+      <li>Weakness</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Glucophage®</li>
+      <li>Fortamet®</li>
+      <li>Glumetza®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Montelukast</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (mon te loo' kast)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Montelukast is used to prevent asthma attacks and for the long-term treatment of asthma in adults and children. It is also used to relieve symptoms of hay fever.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    It is taken once daily in the evening, with or without food. Comes in tablet, chewable, and granule forms.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Dizziness</li>
+      <li>Stomach pain</li>
+      <li>Tiredness</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Singulair®</li>
+    </ul>
+  </div>
+</div>
+
+  <div id="N">
+  <div class="letter-section">
+    <h3 class="letter-heading">N</h3>
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Naproxen</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (na prox' en)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Naproxen is used to relieve pain from various conditions such as headaches, muscle aches, tendonitis, dental pain, and menstrual cramps. It also reduces pain, swelling, and joint stiffness caused by arthritis.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Naproxen is taken by mouth, usually twice daily with food or milk to prevent stomach upset.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Stomach upset</li>
+      <li>Drowsiness</li>
+      <li>Dizziness</li>
+      <li>Heartburn</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Aleve®</li>
+      <li>Naprosyn®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Nitrofurantoin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (nye troe fyoor an' toyn)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Nitrofurantoin is used to treat and prevent urinary tract infections. It works by stopping the growth of bacteria.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Take by mouth with food, usually twice a day. Swallow capsules whole and take with a full glass of water.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Loss of appetite</li>
+      <li>Headache</li>
+      <li>Diarrhea</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Macrobid®</li>
+      <li>Macrodantin®</li>
+    </ul>
+  </div>
+</div>
+
+      <div id="O">
+  <div class="letter-section">
+    <h3 class="letter-heading">O</h3>
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Omeprazole</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (oh mep' ra zol)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Omeprazole is used to treat symptoms of acid reflux and gastroesophageal reflux disease (GERD). It helps heal acid damage to the stomach and esophagus.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Usually taken once daily before a meal. Swallow capsule whole with water.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Stomach pain</li>
+      <li>Nausea</li>
+      <li>Gas</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Prilosec®</li>
+      <li>Prilosec OTC®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ondansetron</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (on dan' se tron)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ondansetron is used to prevent nausea and vomiting caused by cancer chemotherapy, radiation therapy, or surgery.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Usually taken by mouth or injected before chemotherapy or surgery. May be repeated depending on dosage instructions.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Constipation</li>
+      <li>Drowsiness</li>
+      <li>Dizziness</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Zofran®</li>
+      <li>Zofran ODT®</li>
+    </ul>
+  </div>
+</div>
+
+      <div id="P">
+  <div class="letter-section">
+    <h3 class="letter-heading">P</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Paracetamol (Acetaminophen)</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (a seat a min' oh fen)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Used to relieve mild to moderate pain and reduce fever. Commonly used for headaches, muscle aches, arthritis, backaches, colds, and fevers.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth as tablets, capsules, or liquid. Follow dosage on the package or as directed by your doctor.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Generally well tolerated</li>
+      <li>Allergic reactions (rare)</li>
+      <li>Liver damage (in overdose)</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Tylenol®</li>
+      <li>Panadol®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Prednisone</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (pred' ni sone)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Prednisone is a corticosteroid used to treat inflammation, severe allergies, chronic illnesses like asthma, lupus, and arthritis.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth with food to prevent stomach upset. Follow a tapering schedule if prescribed for long-term use.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Increased appetite</li>
+      <li>Weight gain</li>
+      <li>Insomnia</li>
+      <li>Elevated blood pressure</li>
+      <li>Mood changes</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Deltasone®</li>
+      <li>Rayos®</li>
+    </ul>
+  </div>
+</div>
+
+ <div id="Q">
+  <div class="letter-section">
+    <h3 class="letter-heading">Q</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Quetiapine</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (kwe tye' a peen)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Quetiapine is used to treat schizophrenia, bipolar disorder, and depression. It is an antipsychotic that helps restore the balance of neurotransmitters in the brain.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth, usually once or twice a day. Follow the prescribed dose and do not stop suddenly without medical advice.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Drowsiness</li>
+      <li>Dizziness</li>
+      <li>Dry mouth</li>
+      <li>Weight gain</li>
+      <li>Constipation</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Seroquel®</li>
+      <li>Seroquel XR®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Quinapril</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (kwi' na pril)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Quinapril is used to treat high blood pressure and heart failure. It is an ACE inhibitor that relaxes blood vessels.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth, usually once or twice daily with or without food. Follow dosing instructions.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Dizziness</li>
+      <li>Cough</li>
+      <li>Fatigue</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Accupril®</li>
+    </ul>
+  </div>
+</div>
+
+     <div id="R">
+  <div class="letter-section">
+    <h3 class="letter-heading">R</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ranitidine</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (ra ni' ti deen)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ranitidine was used to treat ulcers, GERD, and conditions where the stomach produces too much acid. It is an H2 blocker.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth, with or without food, usually once or twice daily.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Headache</li>
+      <li>Constipation</li>
+      <li>Diarrhea</li>
+      <li>Fatigue</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Zantac®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Risperidone</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (ris pair' i done)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Risperidone is used to treat schizophrenia, bipolar disorder, and irritability associated with autism.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken orally, usually once or twice daily. Can be taken with or without food.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Weight gain</li>
+      <li>Sleepiness</li>
+      <li>Tremors</li>
+      <li>Increased saliva</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Risperdal®</li>
+    </ul>
+  </div>
+</div>
+
+     <div id="S">
+  <div class="letter-section">
+    <h3 class="letter-heading">S</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Simvastatin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (sim va stat' in)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Simvastatin is used to lower levels of "bad" cholesterol (LDL) and triglycerides, and raise "good" cholesterol (HDL) in the blood.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Usually taken once daily in the evening, with or without food.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Muscle pain</li>
+      <li>Headache</li>
+      <li>Stomach pain</li>
+      <li>Constipation</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Zocor®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Salbutamol (Albuterol)</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (sal bue' ta mol)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Salbutamol is used to prevent and treat wheezing and shortness of breath caused by asthma or COPD.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Inhaled using a metered-dose inhaler (MDI) as needed or before exercise to prevent bronchospasm.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Shakiness</li>
+      <li>Headache</li>
+      <li>Rapid heartbeat</li>
+      <li>Nervousness</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Ventolin®</li>
+      <li>ProAir®</li>
+    </ul>
+  </div>
+</div>
+
+  <div id="T">
+  <div class="letter-section">
+    <h3 class="letter-heading">T</h3>
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Tramadol</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (tra' ma dole)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Tramadol is used to relieve moderate to moderately severe pain. It is an opioid analgesic that works in the brain to change how your body feels and responds to pain.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth, usually every 4 to 6 hours as needed. Take exactly as prescribed. Do not increase dose or take it more frequently than prescribed.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Drowsiness</li>
+      <li>Dizziness</li>
+      <li>Constipation</li>
+      <li>Nausea</li>
+      <li>Dry mouth</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Ultram®</li>
+      <li>ConZip®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Tamsulosin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (tam soo' loe sin)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Tamsulosin is used to treat the symptoms of an enlarged prostate (benign prostatic hyperplasia – BPH) such as difficulty urinating, painful urination, and urinary urgency.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Take by mouth once daily, 30 minutes after the same meal each day. Swallow capsules whole; do not crush or chew.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Dizziness</li>
+      <li>Runny nose</li>
+      <li>Abnormal ejaculation</li>
+      <li>Back pain</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Flomax®</li>
+    </ul>
+  </div>
+</div>
+
+
+  <div id="U">
+  <div class="letter-section">
+    <h3 class="letter-heading">U</h3>
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ustekinumab</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (yoo ste kin' yoo mab)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ustekinumab is used to treat plaque psoriasis, psoriatic arthritis, and Crohn's disease. It works by blocking certain proteins that cause inflammation.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Given as an injection under the skin or into a vein, usually by a healthcare provider. Dosage schedule depends on the condition being treated.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Upper respiratory infection</li>
+      <li>Fatigue</li>
+      <li>Headache</li>
+      <li>Joint pain</li>
+      <li>Injection site reactions</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Stelara®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ursodiol</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (ur so' dye ol)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ursodiol is used to dissolve certain types of gallstones and to treat primary biliary cholangitis (PBC), a liver disease.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Take orally two to four times daily with food or milk to minimize stomach upset.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Diarrhea</li>
+      <li>Back pain</li>
+      <li>Dizziness</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Actigall®</li>
+      <li>Urso®</li>
+    </ul>
+  </div>
+</div>
+
+      <div id="V">
+  <div class="letter-section">
+    <h3 class="letter-heading">V</h3>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Valsartan</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (val sar' tan)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Valsartan is used to treat high blood pressure and heart failure. It may also be used after a heart attack to improve survival.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth once or twice daily with or without food. Use exactly as prescribed.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Dizziness</li>
+      <li>Lightheadedness</li>
+      <li>Fatigue</li>
+      <li>Headache</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Diovan®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Vancomycin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (van koe mye' sin)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Vancomycin is used to treat serious bacterial infections, especially those resistant to other antibiotics, such as MRSA and C. difficile.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Administered by IV in a hospital or orally for intestinal infections. Follow your doctor’s schedule exactly.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Stomach pain</li>
+      <li>Red man syndrome (flushing)</li>
+      <li>Hearing loss (rare)</li>
+      <li>Kidney damage (rare)</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Vancocin®</li>
+    </ul>
+  </div>
+</div>
+
+      <div id="W">
+  <div class="letter-section">
+    <h3 class="letter-heading">W</h3>
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Warfarin</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (war' fa rin)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Warfarin is used to prevent blood clots from forming or growing larger in your blood and blood vessels. It is prescribed for people with certain types of irregular heartbeat, blood clot disorders, or after heart valve surgery.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Warfarin comes as a tablet to take by mouth once daily. It must be taken exactly as prescribed. Blood tests (INR) are regularly done to monitor its effects and adjust dosage.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Bleeding gums</li>
+      <li>Unusual bruising</li>
+      <li>Pink or brown urine</li>
+      <li>Heavy menstrual bleeding</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Coumadin®</li>
+      <li>Jantoven®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Wegovy (Semaglutide)</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (weg-oe-vee)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Wegovy is used for chronic weight management in adults and adolescents with obesity or overweight conditions and at least one weight-related medical issue.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    It is injected subcutaneously once weekly. Your doctor will increase your dose gradually over several weeks to reduce gastrointestinal side effects.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Vomiting</li>
+      <li>Constipation</li>
+      <li>Abdominal pain</li>
+      <li>Fatigue</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Wegovy®</li>
+    </ul>
+  </div>
+</div>
+
+          <div id="X">
+  <div class="letter-section">
+    <h3 class="letter-heading">X</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Xanax (Alprazolam)</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (zan-aks)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Xanax is used to manage anxiety disorders and panic disorders. It belongs to the benzodiazepine class and works by enhancing the effects of a natural chemical in the body (GABA).
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth, usually 2 to 4 times daily as directed by your doctor. Do not suddenly stop taking this drug without your doctor's guidance.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Drowsiness</li>
+      <li>Dizziness</li>
+      <li>Increased saliva production</li>
+      <li>Change in sex drive</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Xanax®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Xarelto (Rivaroxaban)</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (zuh-rel-toe)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Xarelto is used to prevent and treat blood clots and to reduce the risk of stroke in people with atrial fibrillation not caused by a heart valve problem.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken once or twice daily by mouth with food or as directed. Take at the same time each day.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Bleeding</li>
+      <li>Back pain</li>
+      <li>Itching</li>
+      <li>Muscle pain</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Xarelto®</li>
+    </ul>
+  </div>
+</div>
+
+          <div id="Y">
+  <div class="letter-section">
+    <h3 class="letter-heading">Y</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Yaz (Drospirenone/Ethinyl Estradiol)</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (yaz)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Yaz is used to prevent pregnancy. It is also used to treat moderate acne and premenstrual dysphoric disorder (PMDD).
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth once daily for 28-day cycles. Tablets should be taken at the same time each day.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Nausea</li>
+      <li>Weight changes</li>
+      <li>Breast tenderness</li>
+      <li>Mood changes</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Yaz®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Yohimbine</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (yo-him-bean)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Yohimbine is used as a supplement for erectile dysfunction and sexual performance. It works by increasing blood flow and nerve impulses.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Typically taken as a tablet once or twice a day. Should only be taken under medical supervision due to side effects.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Increased heart rate</li>
+      <li>High blood pressure</li>
+      <li>Anxiety</li>
+      <li>Insomnia</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Yocon®</li>
+      <li>Aphrodyne®</li>
+    </ul>
+  </div>
+</div>
+
+          <div id="Z">
+  <div class="letter-section">
+    <h3 class="letter-heading">Z</h3>
+
+    <div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Zolpidem</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (zole' pi dem)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Zolpidem is used for the short-term treatment of insomnia (difficulty falling asleep or staying asleep).
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken by mouth right before bedtime. Do not take with or immediately after a meal. Only take when you can stay in bed for a full night.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Drowsiness during the day</li>
+      <li>Dizziness</li>
+      <li>Weakness</li>
+      <li>“Sleep-driving” or doing activities while not fully awake</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Ambien®</li>
+      <li>Edluar®</li>
+      <li>Zolpimist®</li>
+    </ul>
+  </div>
+</div>
+
+<div class="accordion-card">
+  <button class="accordion-toggle">
+    <span>Ziprasidone</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content">
+    <p>pronounced as (zi pras' i done)</p>
+    <p><strong>Why is this medication prescribed?</strong></p>
+    Ziprasidone is used to treat symptoms of schizophrenia and bipolar disorder. It is an atypical antipsychotic.
+
+    <p><strong>How should this medicine be used?</strong></p>
+    Taken twice daily with food. Must be taken consistently to work properly.
+
+    <p><strong>What side effects can this medication cause?</strong></p>
+    <ul>
+      <li>Drowsiness</li>
+      <li>Nausea</li>
+      <li>Dizziness</li>
+      <li>Restlessness</li>
+      <li>Weight gain</li>
+    </ul>
+
+    <p><strong>Brand Names</strong></p>
+    <ul>
+      <li>Geodon®</li>
+    </ul>
+  </div>
+</div>
+
+
+        <!-- Add more letters as needed -->
+      </section>
+    </div>
+
+    <script>
+      // Apply saved theme on load
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+      }
+
+      function toggleDarkMode() {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+      }
+
+      document.querySelectorAll(".accordion-toggle").forEach((toggle) => {
+        toggle.addEventListener("click", () => {
+          const content = toggle.nextElementSibling;
+          const isOpen = toggle.classList.contains("active");
+
+          // Close all
+          document.querySelectorAll(".accordion-toggle").forEach((btn) => {
+            btn.classList.remove("active");
+            btn.querySelector("i").style.transform = "rotate(0deg)";
+          });
+
+          document.querySelectorAll(".accordion-content").forEach((panel) => {
+            panel.classList.remove("open");
+          });
+
+          // Open if not already open
+          if (!isOpen) {
+            toggle.classList.add("active");
+            content.classList.add("open");
+            toggle.querySelector("i").style.transform = "rotate(180deg)";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

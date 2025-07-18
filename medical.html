@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Encyclopedia</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        display: flex;
+        background-color: #ffffff;
+        color: #000000;
+      }
+      /* Dark Mode */
+      body.dark-mode {
+        background-color: #121212;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode h1,
+      body.dark-mode h2,
+      body.dark-mode h3,
+      body.dark-mode p,
+      body.dark-mode a {
+        color: #f0f0f0;
+      }
+
+      /* Sidebar */
+      body.dark-mode .sidebar {
+        background-color: #1f1f1f;
+      }
+
+      body.dark-mode .sidebar nav a {
+        color: #ccc;
+      }
+
+      body.dark-mode .sidebar nav a.active,
+      body.dark-mode .sidebar nav a:hover {
+        color: #00bcd4;
+      }
+
+      /* Card Styling */
+      body.dark-mode .accordion-card {
+        background-color: #1e1e1e;
+        color: #f0f0f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      }
+
+      body.dark-mode .accordion-card:hover {
+        background-color: #2a2a2a;
+      }
+
+      /* Input Fields */
+      body.dark-mode input[type="text"] {
+        background-color: #2c2c2c;
+        color: #f0f0f0;
+        border: 1px solid #444;
+      }
+
+      body.dark-mode input[type="text"]::placeholder {
+        color: #aaa;
+      }
+
+      /* Alphabet links */
+      body.dark-mode .alphabet-nav a {
+        color: #00bcd4;
+      }
+      .sidebar {
+        width: 240px;
+        background-color: #ffffff;
+        padding: 20px;
+        height: 100vh;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+      }
+      .sidebar h2 {
+        color: #00bcd4;
+         margin-bottom: 30px;
+      }
+      .sidebar nav a {
+         display: flex;
+  align-items: center;
+  padding: 0.7rem 0.5rem;
+  color: #555;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+      }
+      
+      .sidebar nav a:hover {
+        background: teal;
+        color: #ffffff;
+      }
+      .main {
+        margin-left: 220px;
+        padding: 1rem 2rem;
+        width: 100%;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .search input {
+        padding: 10px;
+        width: 300px;
+        height: 5px;
+        border-radius: 5px;
+        border: none;
+      }
+
+      #noResultsMessage {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+      .accordion-card {
+        background-color: #f0f0f0;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s;
+      }
+      .accordion-card:hover {
+        background-color: #20cfcf;
+      }
+      .alphabet-nav {
+        margin: 20px 0;
+      }
+      .alphabet-nav a {
+        margin: 0 5px;
+        color: #00bcd4;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .alphabet-nav a:hover {
+        text-decoration: underline;
+      }
+      body.dark-mode .term-card {
+        background-color: #1e1e1e;
+        color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      body.dark-mode .term-card:hover {
+        background-color: #2a2a2a;
+      }
+      .encyclopedia {
+        margin-top: 20px;
+      }
+
+      .mb-20 {
+  margin-bottom: 1.5rem;
+}
+
+
+      .letter-heading {
+        font-size: 1.5rem;
+        color: #00bcd4;
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 2px solid #00bcd4;
+        padding-bottom: 5px;
+      }
+
+      .accordion-card {
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        margin-bottom: 10px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .accordion-toggle {
+        width: 100%;
+        background-color: #ffffff;
+        border: none;
+        padding: 1.2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        color: #333;
+        transition: background-color 0.3s ease;
+      }
+
+      .accordion-toggle:hover {
+        background-color: #e0f7fa;
+      }
+
+      .accordion-toggle i {
+        transition: transform 0.3s ease;
+      }
+
+      .accordion-toggle.active i {
+        transform: rotate(180deg);
+      }
+      .accordion-header {
+        cursor: pointer;
+        font-weight: bold;
+        background-color: #f9f9f9;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        transition: background-color 0.3s;
+      }
+      .accordion-header.active {
+        background-color: #e0f7fa;
+      }
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        padding: 0 15px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-top: none;
+      }
+
+      .accordion-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.accordion-content strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #00838f;
+  text-transform: uppercase;
+}
+.accordion-content ul {
+  padding-left: 1.5rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.accordion-content ul li {
+  margin-bottom: 0.3rem;
+  font-size: 1.05rem;
+}
+
+      .accordion-content.open {
+        max-height: 2000px; /* large enough to fit your content */
+        padding: 1rem 15px;
+      }
+
+      body.dark-mode .accordion-card {
+        background-color: #1e1e1e;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode .accordion-toggle {
+        background-color: #2a2a2a;
+        color: #f0f0f0;
+      }
+
+      body.dark-mode .accordion-content {
+        background-color: #121212;
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("searchInput");
+
+    searchInput.addEventListener("input", function () {
+      const query = this.value.toLowerCase().trim();
+      const cards = document.querySelectorAll(".accordion-card");
+
+      cards.forEach((card) => {
+        const toggle = card.querySelector(".accordion-toggle");
+        const content = card.querySelector(".accordion-content");
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(query)) {
+          card.style.display = "block";
+          toggle.classList.add("active");
+          content.classList.add("open");
+          toggle.querySelector("i").style.transform = "rotate(180deg)";
+        } else {
+          card.style.display = "none";
+          toggle.classList.remove("active");
+          content.classList.remove("open");
+          toggle.querySelector("i").style.transform = "rotate(0deg)";
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll(".accordion-toggle").forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const content = toggle.nextElementSibling;
+      const isOpen = content.classList.contains("open");
+
+      document.querySelectorAll(".accordion-toggle").forEach((btn) => {
+        btn.classList.remove("active");
+        btn.querySelector("i").style.transform = "rotate(0deg)";
+      });
+
+      document.querySelectorAll(".accordion-content").forEach((panel) => {
+        panel.classList.remove("open");
+      });
+
+      if (!isOpen) {
+        toggle.classList.add("active");
+        content.classList.add("open");
+        toggle.querySelector("i").style.transform = "rotate(180deg)";
+      }
+    });
+  });
+</script>
+
+  
+  <body>
+    <div class="sidebar">
+      <h2 class="logo"><i class="fas fa-heartbeat"></i> NURSIDIARY</h2>
+      <nav>
+        <a href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="medical.html" class="active"
+          ><i class="fas fa-book-medical"></i> Medical Encyclopedia</a
+        >
+        <a href="calculator.html"
+          ><i class="fas fa-calculator"></i> Drug Calculation</a
+        >
+        <a href="medicines.html"><i class="fas fa-pills"></i> Medicines</a>
+        <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+        <a href="#" onclick="toggleDarkMode()"
+          ><i class="fas fa-moon"></i> Dark Mode</a
+        >
+      </nav>
+    </div>
+
+    <div class="main fade">
+      <header>
+        <div class="search mb-20">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search medical terms..."
+    oninput="searchAccordionTerms()"
+  />
+  <i class="fas fa-search"></i>
+</div>
+<p id="noResultsMessage" style="display:none; color: red; margin-top: 10px;">No results found.</p>
+
+      </header>
+
+       <section class="medical">
+        <h2>Medical Encyclopedia</h2>
+        <div class="alphabet-nav">
+          <a href="#A">A</a>
+          <a href="#B">B</a>
+          <a href="#C">C</a>
+          <a href="#D">D</a>
+          <a href="#E">E</a>
+          <a href="#F">F</a>
+          <a href="#G">G</a>
+          <a href="#H">H</a>
+          <a href="#I">I</a>
+          <a href="#J">J</a>
+          <a href="#K">K</a>
+          <a href="#L">L</a>
+          <a href="#M">M</a>
+          <a href="#N">N</a>
+          <a href="#O">O</a>
+          <a href="#P">P</a>
+          <a href="#Q">Q</a>
+          <a href="#R">R</a>
+          <a href="#S">S</a>
+          <a href="#T">T</a>
+          <a href="#U">U</a>
+          <a href="#V">V</a>
+          <a href="#W">W</a>
+          <a href="#X">X</a>
+          <a href="#Y">Y</a>
+          <a href="#Z">Z</a>
+        </div>
+
+        <div id="A">
+          <div class="letter-section">
+            <h3 class="letter-heading">A</h3>
+            <div class="accordion-card">
+              <button class="accordion-toggle">
+                <span>Aase Syndrome</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="accordion-content">
+                <p>Aase syndrome is a rare disorder
+                  that involves anemia and certain joint and skeletal
+                  deformities.
+                </p>
+
+                <p><strong>Causes</strong></p>
+                
+                Many cases of Aase syndrome occur
+                without a known reason and are not passed down through
+                families (inherited). However, some cases (45%) have been
+                shown to be inherited. These are due to a change in 1 of 20
+                genes important for making protein correctly (the genes make
+                ribosomal proteins).This condition is similar to
+                Diamond-Blackfan anemia, and the two conditions should
+                considered the same. A missing piece on chromosome 19 is found
+                in some people with Diamond-Blackfan anemia. The anemia in
+                Aase syndrome is caused by poor development of the bone
+                marrow, which is where blood cells are formed.
+              </p>
+
+                <p><strong>Symptoms</strong></p>
+                Symptoms may include:</p>
+              <ul>
+            <li>Small knuckles</li>
+            <li>Cleft Palate</li>
+            <li>Droopy eyelids</li>
+            <li>Deformed ears</li>
+            <li>Inability to fully extend the joints from birth</li>
+            <li>Narrow shoulders</li>
+            <li>Pale skin</li>
+            <li>Triple-jointed thumbs</li>
+          </ul>
+                </p>
+                <p><strong>Treatment</strong><p></p> 
+              </ul>
+                Treatment may involve blood
+                  transfusions in the first year of life to treat anemia. A
+                  steroid medicine called prednisone has also been used to treat
+                  anemia associated with Aase syndrome. However, it should only
+                  be used after reviewing the benefits and risks with a provider
+                  who has experience treating anemias. A bone marrow transplant
+                  may be necessary if other treatment fails.
+            </ul>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-card">
+            <button class="accordion-toggle">
+              <span>Asthma</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="accordion-content">
+              <p>
+                Asthma is a chronic disease that causes the airways of the lungs to swell and narrow. 
+                It leads to breathing difficulty such as wheezing, shortness of breath, chest tightness, 
+                and coughing.
+              </p>
+              <p><strong>Causes</strong></p>
+              Asthma is caused by swelling (inflammation) in the airways. 
+              An asthma attack occurs when the lining of the air passages has become swollen and the muscles surrounding the airways become tight. 
+              This narrowing reduces the amount of air that can pass through the airway.
+              <p>Asthma symptoms can be caused by breathing in substances called allergens or triggers, or by other causes.</p>
+             Common asthma triggers include:</p>
+                <ul>
+                <li>Animals (pet hair or dander)</li>
+                <li>Dust mites</li>
+                <li>Certain medicines (aspirin and other nonsteroidal anti-inflammatory drugs [NSAIDs])</li>
+                <li>Changes in weather (most often cold weather)</li>
+                <li>Chemicals in the air (pollution) or in food</li>
+                <li>Physical activity</li>
+                <li>Mold</li>
+                <li>Pollen</li>
+                <li>Respiratory infections, such as the common cold and many other viruses</li>
+                <li>Strong emotions (stress)</li>
+                <li>Tobacco or other inhalant that is smoked</li>
+                </ul>
+              </p>
+              Substances in some workplaces can also trigger asthma symptoms, leading to occupational asthma.
+              The most common triggers are wood dust, grain dust, animal dander, fungi, or chemicals.</p>
+
+              Many people with asthma have a personal or family history of allergies, such as hay fever
+              (allergic rhinitis) or eczema. Others have no history of allergies.</p>
+
+              <p><strong>Symptoms</strong></p>
+              Asthma symptoms vary from person to person. 
+              For example, you may have symptoms all the time or mostly during physical activity. </p>
+
+              Symptoms of asthma include:</p>
+              <ul>
+                <li>Cough with or without sputum (phlegm) production</li>
+                <li>Pulling in of the skin between the ribs when breathing (intercostal retractions)</li>
+                <li>Shortness of breath that gets worse with exercise or activity</li>
+                <li>Whistling sound or wheezing as you breathe</li>
+                <li>Pain or tightness in the chest</li>
+                <li>Difficulty sleeping</li>
+                <li>Abnormal breathing pattern (breathing out takes more than twice as long as breathing in)</li>
+              </ul>
+              <p>Emergency symptoms that need prompt medical help include:</p>
+              <ul>
+                <li>Bluish color to the lips and face (cyanosis)</li>
+                <li>Decreased level of alertness, such as severe drowsiness or confusion, during an asthma attack</li>
+                <li>Extreme difficulty breathing</li>
+                <li>Rapid pulse</li>
+                <li>Severe anxiety due to shortness of breath</li>
+                <li>Sweating</li>
+                <li>Difficulty speaking</li>
+                <li>Breathing temporarily stops</li>
+              </ul>
+              <p><strong>Treatment</strong></p>
+              The goals of treatment are to:</p>
+              <ul>
+                <li>Control airway swelling</li>
+                <li>Limit exposure to substances that may trigger your symptoms</li>
+                <li>Help you to be able to do normal activities without having asthma symptoms</li>
+              </ul>
+              <p>You and your provider should work as a team to manage your asthma symptoms.
+                Follow your provider's instructions on taking medicines, eliminating asthma triggers, and monitoring symptoms.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="B">
+  <div class="letter-section">
+    <h3 class="letter-heading">B</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Bronchitis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Inflammation of the lining of bronchial tubes, which carry air to and from the lungs.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Viruses (most common)</li>
+          <li>Exposure to tobacco smoke</li>
+          <li>Air pollutants</li>
+          <li>Dust and toxic gases</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Coughing with mucus</li>
+          <li>Wheezing</li>
+          <li>Chest discomfort</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Rest, hydration, and medications such as cough suppressants or bronchodilators. Avoid smoking and pollutants.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Bradycardia</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Slower than normal heart rate, typically fewer than 60 beats per minute.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Heart tissue damage</li>
+          <li>Hypothyroidism</li>
+          <li>Sleep apnea</li>
+          <li>Certain medications</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fatigue</li>
+          <li>Dizziness</li>
+          <li>Shortness of breath</li>
+          <li>Chest pains</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>May involve pacemaker installation, medication adjustments, or treating the underlying condition.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="C">
+  <div class="letter-section">
+    <h3 class="letter-heading">C</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Chickenpox</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A highly contagious viral infection causing an itchy, blister-like rash.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Varicella-zoster virus</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever</li>
+          <li>Loss of appetite</li>
+          <li>Blister-like rash</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Rest, hydration, calamine lotion, and antiviral medications in severe cases.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Conjunctivitis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Also called pink eye, it's inflammation of the conjunctiva of the eye.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Viruses or bacteria</li>
+          <li>Allergens</li>
+          <li>Chemical exposure</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Redness in the white of the eye</li>
+          <li>Itching or burning sensation</li>
+          <li>Discharge or crusting</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antibiotic drops for bacterial infections; antihistamines or steroids for allergies.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="D">
+  <div class="letter-section">
+    <h3 class="letter-heading">D</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Diabetes Mellitus</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A metabolic disorder characterized by high blood sugar levels over a prolonged period.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Insulin resistance</li>
+          <li>Autoimmune destruction of insulin-producing cells (Type 1)</li>
+          <li>Obesity and poor diet (Type 2)</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Increased thirst and hunger</li>
+          <li>Frequent urination</li>
+          <li>Fatigue</li>
+          <li>Blurred vision</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Insulin therapy, oral medications, lifestyle changes, and regular blood sugar monitoring.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Dengue Fever</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A mosquito-borne viral infection causing flu-like illness and, in severe cases, deadly complications.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Dengue virus transmitted by Aedes mosquitoes</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>High fever</li>
+          <li>Severe headaches</li>
+          <li>Muscle and joint pain</li>
+          <li>Skin rash</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Supportive care: hydration, rest, and pain relievers (avoid aspirin). Hospitalization for severe cases.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="E">
+  <div class="letter-section">
+    <h3 class="letter-heading">E</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Epilepsy</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A neurological disorder marked by recurrent, unprovoked seizures.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Brain injury</li>
+          <li>Genetic influence</li>
+          <li>Stroke</li>
+          <li>Infections like meningitis</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Temporary confusion</li>
+          <li>Staring spells</li>
+          <li>Uncontrolled jerking movements</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Anti-seizure medications, surgery, nerve stimulation, and dietary therapy.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Eczema</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A group of conditions causing inflammation, redness, and itchiness of the skin.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Genetics</li>
+          <li>Immune system dysfunction</li>
+          <li>Environmental triggers</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Dry, itchy skin</li>
+          <li>Red patches</li>
+          <li>Cracked or scaly areas</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Moisturizers, topical steroids, antihistamines, and avoiding irritants.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="F">
+  <div class="letter-section">
+    <h3 class="letter-heading">F</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Fibromyalgia</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A disorder characterized by widespread musculoskeletal pain, fatigue, and tenderness in localized areas.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Abnormal pain signaling in the brain</li>
+          <li>Stress or trauma</li>
+          <li>Genetics</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Widespread pain</li>
+          <li>Fatigue</li>
+          <li>Memory and mood issues ("fibro fog")</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Pain relievers, antidepressants, exercise, and cognitive behavioral therapy.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Flu (Influenza)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A contagious respiratory illness caused by influenza viruses.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Influenza viruses (Types A, B, and C)</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever or chills</li>
+          <li>Cough and sore throat</li>
+          <li>Runny nose</li>
+          <li>Body aches</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Rest, hydration, antiviral medications (if early), and symptom relief.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="G">
+  <div class="letter-section">
+    <h3 class="letter-heading">G</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Gastritis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Inflammation of the stomach lining that can be acute or chronic.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Helicobacter pylori infection</li>
+          <li>Excessive alcohol consumption</li>
+          <li>Chronic use of NSAIDs</li>
+          <li>Stress</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Stomach pain</li>
+          <li>Nausea and vomiting</li>
+          <li>Bloating</li>
+          <li>Loss of appetite</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antacids, antibiotics (if caused by H. pylori), and avoiding irritants like alcohol and spicy foods.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Glaucoma</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A group of eye conditions that damage the optic nerve and can cause vision loss.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Increased intraocular pressure</li>
+          <li>Genetic factors</li>
+          <li>Eye injuries</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Loss of peripheral vision</li>
+          <li>Eye pain</li>
+          <li>Blurred vision</li>
+          <li>Halos around lights</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Prescription eye drops, oral medications, laser treatment, or surgery.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="H">
+  <div class="letter-section">
+    <h3 class="letter-heading">H</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Hypertension</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>High blood pressure, a condition where the force of the blood against artery walls is too high.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Poor diet (high salt intake)</li>
+          <li>Obesity</li>
+          <li>Genetics</li>
+          <li>Stress</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Often asymptomatic</li>
+          <li>Headaches</li>
+          <li>Shortness of breath</li>
+          <li>Vision problems</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Lifestyle changes, antihypertensive medications, low-sodium diet, and regular exercise.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Hepatitis B</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A serious liver infection caused by the hepatitis B virus (HBV).</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Exposure to infected blood or body fluids</li>
+          <li>Unprotected sex</li>
+          <li>Sharing needles</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Jaundice (yellowing of skin and eyes)</li>
+          <li>Fatigue</li>
+          <li>Abdominal pain</li>
+          <li>Nausea and vomiting</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antiviral medications, supportive care, and monitoring for liver damage. Vaccination prevents infection.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="I">
+  <div class="letter-section">
+    <h3 class="letter-heading">I</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Influenza</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A highly contagious viral infection that attacks the respiratory system.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Influenza virus types A and B</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>High fever</li>
+          <li>Cough</li>
+          <li>Body aches</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Rest, fluids, antiviral medications (if taken early), and symptom relief medications.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Irritable Bowel Syndrome (IBS)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A chronic condition affecting the large intestine, causing abdominal discomfort and irregular bowel habits.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Muscle contractions in the intestine</li>
+          <li>Nervous system abnormalities</li>
+          <li>Infections and inflammation</li>
+          <li>Food intolerances</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Abdominal cramping</li>
+          <li>Bloating</li>
+          <li>Gas</li>
+          <li>Constipation or diarrhea</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Diet changes (e.g. low FODMAP), fiber supplements, stress management, and medications for specific symptoms.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="J">
+  <div class="letter-section">
+    <h3 class="letter-heading">J</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Jaundice</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Yellowing of the skin and eyes caused by excess bilirubin in the blood.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Liver disease (e.g., hepatitis, cirrhosis)</li>
+          <li>Bile duct obstruction</li>
+          <li>Hemolysis (breakdown of red blood cells)</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Yellow skin and eyes</li>
+          <li>Dark urine</li>
+          <li>Pale stools</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Treating the underlying cause, such as managing liver disease or clearing bile duct blockages.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Juvenile Idiopathic Arthritis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A type of arthritis that occurs in children under the age of 16, causing joint inflammation and stiffness.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Autoimmune reaction</li>
+          <li>Genetic predisposition</li>
+          <li>Environmental triggers</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Joint pain and swelling</li>
+          <li>Fever</li>
+          <li>Fatigue</li>
+          <li>Reduced physical activity</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Anti-inflammatory drugs, physical therapy, corticosteroids, and disease-modifying antirheumatic drugs (DMARDs).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="K">
+  <div class="letter-section">
+    <h3 class="letter-heading">K</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Kidney Stones</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Hard deposits made of minerals and salts that form inside the kidneys.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Dehydration</li>
+          <li>High salt or protein diet</li>
+          <li>Family history</li>
+          <li>Certain medical conditions</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Severe lower back pain</li>
+          <li>Bloody urine</li>
+          <li>Nausea or vomiting</li>
+          <li>Frequent urination</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Increased fluid intake, pain relievers, or surgical procedures like lithotripsy or ureteroscopy if needed.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Kawasaki Disease</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>An illness that causes inflammation in blood vessels throughout the body, primarily affecting children.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Unknown; possibly viral or bacterial triggers in genetically predisposed individuals</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>High fever lasting more than five days</li>
+          <li>Red eyes and lips</li>
+          <li>Swollen hands and feet</li>
+          <li>Rash</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Intravenous immunoglobulin (IVIG) and aspirin therapy to reduce inflammation and prevent heart complications.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="L">
+  <div class="letter-section">
+    <h3 class="letter-heading">L</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Leukemia</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Cancer of the body’s blood-forming tissues, including the bone marrow and the lymphatic system.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Genetic mutations</li>
+          <li>Radiation exposure</li>
+          <li>Smoking</li>
+          <li>Certain inherited disorders</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fatigue</li>
+          <li>Frequent infections</li>
+          <li>Easy bruising or bleeding</li>
+          <li>Weight loss</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Chemotherapy, radiation therapy, stem cell transplant, and targeted drug therapy depending on the type.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Lupus</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A chronic autoimmune disease that can cause inflammation and damage to various body systems.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Genetics</li>
+          <li>Environmental triggers (sunlight, infections)</li>
+          <li>Certain medications</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Butterfly-shaped rash on the face</li>
+          <li>Fatigue</li>
+          <li>Joint pain</li>
+          <li>Fever</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Anti-inflammatory drugs, corticosteroids, immunosuppressants, and lifestyle modifications.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="M">
+  <div class="letter-section">
+    <h3 class="letter-heading">M</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Malaria</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A serious and sometimes fatal disease caused by a parasite transmitted through mosquito bites.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Infection by Plasmodium parasites</li>
+          <li>Bite from infected Anopheles mosquitoes</li>
+          <li>Rarely, through blood transfusion or shared needles</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever and chills</li>
+          <li>Headache and muscle aches</li>
+          <li>Nausea and vomiting</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antimalarial medications such as chloroquine, artemisinin-based combination therapies (ACTs), and supportive care.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Measles</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A highly contagious viral disease that causes a total-body skin rash and flu-like symptoms.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Infection by the measles virus (rubeola)</li>
+          <li>Spread through coughing or sneezing</li>
+          <li>Close contact with infected individuals</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>High fever</li>
+          <li>Cough and runny nose</li>
+          <li>Red eyes</li>
+          <li>Rash that spreads across the body</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>No specific treatment; supportive care with fluids, rest, and fever management. Vitamin A supplements may help reduce severity.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="N">
+  <div class="letter-section">
+    <h3 class="letter-heading">N</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Nephrotic Syndrome</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A kidney disorder that causes the body to excrete too much protein in the urine.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Glomerulonephritis</li>
+          <li>Diabetes-related kidney damage</li>
+          <li>Lupus</li>
+          <li>Infections like hepatitis</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Swelling in legs and face</li>
+          <li>Foamy urine</li>
+          <li>Weight gain due to fluid retention</li>
+          <li>Fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Diuretics, ACE inhibitors, corticosteroids, and dietary changes (low salt and low fat).</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Norovirus Infection</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A highly contagious virus that causes vomiting and diarrhea, often called the “stomach flu.”</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Eating contaminated food or water</li>
+          <li>Touching contaminated surfaces</li>
+          <li>Close contact with infected people</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Vomiting</li>
+          <li>Diarrhea</li>
+          <li>Stomach pain and cramps</li>
+          <li>Low-grade fever</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Supportive care with hydration, rest, and symptom relief. No specific antiviral treatment.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="O">
+  <div class="letter-section">
+    <h3 class="letter-heading">O</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Osteoarthritis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A degenerative joint disease where cartilage wears down over time, causing pain and stiffness.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Aging</li>
+          <li>Joint injury</li>
+          <li>Obesity</li>
+          <li>Genetic predisposition</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Joint pain and tenderness</li>
+          <li>Stiffness, especially in the morning</li>
+          <li>Swelling around joints</li>
+          <li>Limited range of motion</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Pain relievers, physical therapy, joint injections, and lifestyle modifications such as exercise and weight loss.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Osteoporosis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A condition in which bones become weak and brittle, increasing the risk of fractures.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Aging</li>
+          <li>Hormonal changes (especially postmenopausal women)</li>
+          <li>Calcium or vitamin D deficiency</li>
+          <li>Long-term use of steroids</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Back pain</li>
+          <li>Loss of height over time</li>
+          <li>Stooped posture</li>
+          <li>Frequent bone fractures</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Calcium and vitamin D supplements, weight-bearing exercises, bisphosphonates, and hormone-related therapy.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="P">
+  <div class="letter-section">
+    <h3 class="letter-heading">P</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Pneumonia</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Pneumonia is an infection that inflames the air sacs in one or both lungs, which may fill with fluid or pus.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Bacteria (e.g., Streptococcus pneumoniae)</li>
+          <li>Viruses (e.g., influenza, COVID-19)</li>
+          <li>Fungi</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Chest pain when breathing or coughing</li>
+          <li>Fatigue</li>
+          <li>Fever, sweating, and chills</li>
+          <li>Cough with phlegm</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antibiotics for bacterial pneumonia, antivirals if viral, fever reducers, oxygen therapy, and rest.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Psoriasis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A chronic autoimmune condition that causes skin cells to build up rapidly, forming scales and itchy, dry patches.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Immune system overactivity</li>
+          <li>Genetics</li>
+          <li>Infections, stress, or certain medications</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Red patches of skin with silvery scales</li>
+          <li>Dry, cracked skin that may bleed</li>
+          <li>Itching, burning, or soreness</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Topical corticosteroids, phototherapy, biologics, and systemic medications like methotrexate.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="Q">
+  <div class="letter-section">
+    <h3 class="letter-heading">Q</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Q Fever</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Q fever is a bacterial infection caused by *Coxiella burnetii* that can affect the lungs, liver, heart, and other parts of the body.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Inhalation of dust from infected animals</li>
+          <li>Contact with animal birth products</li>
+          <li>Drinking unpasteurized milk</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>High fever</li>
+          <li>Severe headache</li>
+          <li>Muscle pain</li>
+          <li>Chills and fatigue</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antibiotics like doxycycline are used for treatment. Chronic cases may require long-term therapy.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Quinsy (Peritonsillar Abscess)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A complication of tonsillitis in which pus collects between the tonsil and the throat wall.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Bacterial infection, commonly Streptococcus pyogenes</li>
+          <li>Untreated or severe tonsillitis</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Severe sore throat (usually one side)</li>
+          <li>Difficulty swallowing</li>
+          <li>Swollen lymph nodes</li>
+          <li>Muffled voice</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antibiotics, drainage of the abscess, and sometimes surgical removal of tonsils (tonsillectomy).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="R">
+  <div class="letter-section">
+    <h3 class="letter-heading">R</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Rheumatoid Arthritis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A chronic inflammatory autoimmune disorder that primarily affects joints.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Immune system attacking joint linings</li>
+          <li>Genetic and environmental triggers</li>
+          <li>Hormonal influence</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Joint pain, swelling, and stiffness</li>
+          <li>Fatigue and fever</li>
+          <li>Loss of joint function</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>DMARDs (disease-modifying antirheumatic drugs), NSAIDs, corticosteroids, and physical therapy.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Rosacea</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A chronic skin condition that causes facial redness, visible blood vessels, and sometimes acne-like bumps.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Unknown exact cause (possibly genetic and environmental)</li>
+          <li>Triggers include heat, spicy food, alcohol, and stress</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Facial flushing</li>
+          <li>Red bumps and pimples</li>
+          <li>Visible small blood vessels</li>
+          <li>Eye irritation</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Topical creams, antibiotics, laser therapy, and trigger avoidance strategies.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="S">
+  <div class="letter-section">
+    <h3 class="letter-heading">S</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Scabies</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Scabies is a highly contagious skin condition caused by a tiny mite that burrows into the skin.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Sarcoptes scabiei mite infestation</li>
+          <li>Close physical contact with an infected person</li>
+          <li>Sharing clothes or bedding</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Intense itching, especially at night</li>
+          <li>Rash with small blisters or sores</li>
+          <li>Thin, irregular burrow tracks made by the mites</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Topical creams (e.g., permethrin), oral medication (ivermectin), and washing clothing and bedding in hot water.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Stroke</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A medical emergency where blood flow to part of the brain is interrupted, causing brain cells to die.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Blood clot blocking a brain artery (ischemic stroke)</li>
+          <li>Rupture of a blood vessel (hemorrhagic stroke)</li>
+          <li>Temporary blood flow interruption (TIA or mini-stroke)</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Sudden numbness or weakness</li>
+          <li>Confusion or difficulty speaking</li>
+          <li>Loss of balance or coordination</li>
+          <li>Severe headache</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Immediate emergency care, clot-busting drugs (tPA), surgery, rehabilitation therapy, and risk factor management.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="T">
+  <div class="letter-section">
+    <h3 class="letter-heading">T</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Tuberculosis (TB)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Tuberculosis is a serious infectious disease that mainly affects the lungs but can also impact other organs.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Mycobacterium tuberculosis bacteria</li>
+          <li>Airborne droplets from coughs or sneezes</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Persistent cough for more than 3 weeks</li>
+          <li>Chest pain</li>
+          <li>Weight loss and fatigue</li>
+          <li>Night sweats and fever</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Long-term antibiotic therapy, usually 6–9 months, using medications such as isoniazid and rifampin.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Tetanus</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Tetanus is a potentially deadly bacterial infection that causes painful muscle stiffness and spasms.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Clostridium tetani bacteria entering a wound</li>
+          <li>Exposure to contaminated objects (rusty nails, soil)</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Jaw cramping ("lockjaw")</li>
+          <li>Muscle stiffness in the neck and abdomen</li>
+          <li>Seizures and fever</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Immediate wound care, tetanus immunoglobulin, antibiotics, and supportive care in a hospital setting.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="U">
+  <div class="letter-section">
+    <h3 class="letter-heading">U</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Urinary Tract Infection (UTI)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A urinary tract infection is an infection in any part of the urinary system—kidneys, bladder, or urethra.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Bacteria (commonly E. coli)</li>
+          <li>Sexual activity</li>
+          <li>Poor hygiene</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Burning sensation during urination</li>
+          <li>Frequent urge to urinate</li>
+          <li>Cloudy or strong-smelling urine</li>
+          <li>Pelvic pain</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antibiotic medications, increased fluid intake, and pain relievers if needed.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Ulcerative Colitis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Ulcerative colitis is a chronic inflammatory bowel disease causing inflammation and ulcers in the colon lining.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Autoimmune reaction</li>
+          <li>Genetics</li>
+          <li>Environmental triggers</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Abdominal pain and cramping</li>
+          <li>Bloody diarrhea</li>
+          <li>Urgent need to defecate</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Anti-inflammatory drugs, immune system suppressors, dietary changes, and sometimes surgery (colectomy).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="V">
+  <div class="letter-section">
+    <h3 class="letter-heading">V</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Varicella (Chickenpox)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Varicella, commonly known as chickenpox, is a highly contagious disease that causes an itchy, blister-like rash.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Varicella-zoster virus (VZV)</li>
+          <li>Close contact with an infected individual</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever</li>
+          <li>Fatigue and loss of appetite</li>
+          <li>Itchy rash with fluid-filled blisters</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Supportive care (rest, fluids), antihistamines for itch relief, and antiviral drugs in severe cases.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Vertigo</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Vertigo is a sensation of spinning or dizziness, often caused by problems in the inner ear.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Benign paroxysmal positional vertigo (BPPV)</li>
+          <li>Meniere’s disease</li>
+          <li>Inner ear infections</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Sensation of spinning or swaying</li>
+          <li>Loss of balance</li>
+          <li>Nausea or vomiting</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Vestibular rehabilitation therapy, medications (e.g., meclizine), and maneuvers like the Epley maneuver.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="W">
+  <div class="letter-section">
+    <h3 class="letter-heading">W</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Whooping Cough (Pertussis)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A bacterial infection of the respiratory tract that causes severe coughing fits followed by a "whooping" sound.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Bordetella pertussis bacteria</li>
+          <li>Spread through respiratory droplets</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Severe coughing spells</li>
+          <li>Vomiting after coughing</li>
+          <li>Fatigue and difficulty breathing</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Antibiotics (azithromycin), cough suppressants, and vaccination (DTaP).</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Wilson's Disease</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Wilson's disease is a rare inherited disorder that causes copper to accumulate in the liver, brain, and other organs.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Genetic mutation in ATP7B gene</li>
+          <li>Impaired copper elimination by the liver</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Jaundice</li>
+          <li>Abdominal swelling</li>
+          <li>Neurological and psychiatric symptoms</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Medications to remove excess copper (chelation therapy), zinc therapy, and liver transplant if severe.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="X">
+  <div class="letter-section">
+    <h3 class="letter-heading">X</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Xerostomia (Dry Mouth)</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Xerostomia is the medical term for dry mouth due to reduced or absent saliva flow.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Medications (e.g., antihistamines, antidepressants)</li>
+          <li>Radiation therapy to the head or neck</li>
+          <li>Sjögren’s syndrome</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Dry or sticky feeling in the mouth</li>
+          <li>Difficulty swallowing</li>
+          <li>Cracked lips and bad breath</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Staying hydrated, saliva substitutes, and managing underlying causes.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>X-linked Agammaglobulinemia</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A rare genetic disorder where the body cannot produce enough antibodies to fight infections.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Mutation in the BTK gene</li>
+          <li>Inherited in an X-linked recessive pattern</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Frequent bacterial infections</li>
+          <li>Sinusitis, pneumonia, and ear infections</li>
+          <li>Low or absent levels of immunoglobulins</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Regular intravenous immunoglobulin (IVIG) therapy and antibiotics as needed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="Y">
+  <div class="letter-section">
+    <h3 class="letter-heading">Y</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Yellow Fever</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Yellow fever is a viral hemorrhagic disease transmitted by mosquitoes, mostly in tropical regions.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Yellow fever virus (a flavivirus)</li>
+          <li>Spread by Aedes and Haemagogus mosquitoes</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever and chills</li>
+          <li>Jaundice</li>
+          <li>Muscle pain and vomiting</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>No specific antiviral treatment; supportive care, prevention via yellow fever vaccination.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Yersiniosis</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Yersiniosis is an infection caused by bacteria of the genus Yersinia, typically affecting the intestines.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Yersinia enterocolitica (most common)</li>
+          <li>Contaminated food (especially pork)</li>
+          <li>Unpasteurized milk or untreated water</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever and abdominal pain</li>
+          <li>Diarrhea (sometimes bloody)</li>
+          <li>Vomiting</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Most cases resolve without treatment; antibiotics (e.g., ciprofloxacin) for severe infections.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="Z">
+  <div class="letter-section">
+    <h3 class="letter-heading">Z</h3>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Zika Virus</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>Zika is a mosquito-borne virus that can cause birth defects when passed to a fetus during pregnancy.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Zika virus (flavivirus)</li>
+          <li>Spread by Aedes mosquitoes</li>
+          <li>Sexual transmission or from mother to fetus</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Fever and rash</li>
+          <li>Joint pain and conjunctivitis</li>
+          <li>Muscle pain and headache</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>No specific treatment; supportive care, rest, fluids, and pain relief.</p>
+      </div>
+    </div>
+
+    <div class="accordion-card">
+      <button class="accordion-toggle">
+        <span>Zollinger-Ellison Syndrome</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content">
+        <p><strong>Definition</strong></p>
+        <p>A rare condition where one or more tumors in the pancreas or duodenum cause excessive gastric acid production.</p>
+
+        <p><strong>Causes</strong></p>
+        <ul>
+          <li>Gastrin-secreting tumors (gastrinomas)</li>
+          <li>Genetic conditions like MEN1</li>
+        </ul>
+
+        <p><strong>Symptoms</strong></p>
+        <ul>
+          <li>Severe peptic ulcers</li>
+          <li>Abdominal pain and diarrhea</li>
+          <li>Gastroesophageal reflux</li>
+        </ul>
+
+        <p><strong>Treatment</strong></p>
+        <p>Proton pump inhibitors, surgical removal of tumors, and treatment of associated conditions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- Add more letters as needed -->
+      </section>
+    </div>
+
+    <script>
+      // Apply saved theme on load
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+      }
+
+      function toggleDarkMode() {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+      }
+
+      document.querySelectorAll(".accordion-toggle").forEach((toggle) => {
+        toggle.addEventListener("click", () => {
+          const content = toggle.nextElementSibling;
+          const isOpen = toggle.classList.contains("active");
+
+          // Close all
+          document.querySelectorAll(".accordion-toggle").forEach((btn) => {
+            btn.classList.remove("active");
+            btn.querySelector("i").style.transform = "rotate(0deg)";
+          });
+
+          document.querySelectorAll(".accordion-content").forEach((panel) => {
+            panel.classList.remove("open");
+          });
+
+          // Open if not already open
+          if (!isOpen) {
+            toggle.classList.add("active");
+            content.classList.add("open");
+            toggle.querySelector("i").style.transform = "rotate(180deg)";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
